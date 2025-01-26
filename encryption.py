@@ -52,6 +52,19 @@ def encryption(file_name):
 def decryption(file_name):
     """Decrypt the contents of the given file."""
 
+    try:
+        key = load_key()
+        decipher = AES.new(key, AES.MODE_CTR)
+        with open(file_name, 'rb') as file:
+            data = file.read()
+
+        decrypted_text = decipher.decrypt(data)
+
+        with open(file_name, 'wb') as file:
+            file.write(decrypted_text)
+        print("File has been decrypted.")
+    except FileNotFoundError:
+        print("File was not found.")
 
 
 def encrypt_or_decrypt():
@@ -63,7 +76,11 @@ def encrypt_or_decrypt():
         file_name = input("Enter path to file you want to encrypt: ")
         encryption(file_name)
     elif choose == '2':
-        decryption()
+        file_name = input("Enter path to file you want to decrypt: ")
+        decryption(file_name)
+    else:
+        print("Invalid input!")
+        print("Please enter '1' or '2'.")
 
 
 def main():
